@@ -3,13 +3,18 @@
     out of the json training and test data provided by Clickbait Challenge.
 """
 import json, os
-
+import util
 
 # Given a pathname,
+# train or val simply tell getRawData to use a pre-assigned path
 # Returns instance and truth, both scraped from the json
-def getRawData(pathname):
-    instance_path = os.path.join('.', pathname, "instances.jsonl")
-    truth_path = os.path.join('.', pathname, "truth.jsonl")
+def getRawData(pathname=None, train=False, val=False):
+    if pathname != None:
+        instance_path, truth_path = util.getPaths(pathname)
+    elif train:
+        instance_path, truth_path = util.TRAIN_INSTANCE_PATH, util.TRAIN_TRUTH_PATH
+    else:
+        instance_path, truth_path = util.VAL_INSTANCE_PATH, util.VAL_TRUTH_PATH
     instance = []
     truth = []
     with open(truth_path, "r") as truth_file:
