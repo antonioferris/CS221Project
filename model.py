@@ -5,5 +5,4 @@
 import data
 
 def dumbClassifier(pathname):
-    instance, truth = data.getRawData(pathname)
-    
+    pass
