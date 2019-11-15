@@ -4,6 +4,7 @@
 """
 import json, os
 import util
+from stop_words import get_stop_words
 
 # Given a pathname,
 # train or val simply tell getRawData to use a pre-assigned path
@@ -23,5 +24,19 @@ def getRawData(pathname=None, train=False, val=False):
     with open(instance_path, "r", encoding='utf-8') as instance_file:
         for line in instance_file:
             instance.append(json.loads(line))
-    # print('BABAGANOUSH') Wonder if Johannes will find this...
     return (instance, truth)
+
+# This function takes in a list of raw strings
+# and outputs a tokenized list of clean words
+# clean being lowercase, no stopwords, no punctuation
+def getTokenizedWords(text):
+    tokens = [word.strip() for word in text]
+    words = [word.lower() for word in tokens if word.isalpha()]
+    stop_words = get_stop_words('en')
+    words = [word for word in words if not word in stop_words]
+    return words
+
+instance, truth = getRawData(train=True)
+article_one = instance[0]["postText"]
+print(article_one)
+print(getTokenizedWords(article_one))
