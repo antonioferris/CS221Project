@@ -39,6 +39,7 @@ def classifier(inst):
     description = inst["targetDescription"]
     keywords = inst["targetKeywords"]
     paragraphs = inst["targetParagraphs"]
+    captions = inst["targetCaptions"]
 
     #Process text
     def processText(text):
@@ -57,7 +58,7 @@ def classifier(inst):
                 total_count += 1
         return punct_count, total_count
 
-    #Feature: Title punctuation
+    #Feature: Title punctuation count
     title_punc, title_punc_count = countPunc(title)
 
     #Feature: count of !
@@ -84,10 +85,9 @@ def classifier(inst):
     #Feature: Paragraph length
 
     #Feature: Number of paragraphs
+    num_pars = len(paragraphs)
 
     #Feature: Number of keywords
-
-    #Feature: Number Named Entities
 
     #Proper Nouns in Title
     tagged_title = pos_tag(title)
@@ -97,11 +97,17 @@ def classifier(inst):
     tagged_keywords = pos_tag(keywords)
     keywords_proper_nouns = [word for word, pos in tagged_keywords if pos == 'NNP']
 
+    #Feature: Number of proper nouns in , keywords
+    title_nnp_count = len(title_proper_nouns)
+    keyword_nnp_count = len(keywords_proper_nouns)
+
     #Feature: Title Word2Vec
     processed_title = processText(title)
 
     #Feature: Keyword Word2Vec
     processed_keywords = processText(keyword)
+
+    #Things to go into Word2Vec: processed_title, processed_keywords, title_proper_nouns, keywords_proper_nouns, captions
 
 
 
