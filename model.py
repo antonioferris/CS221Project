@@ -6,13 +6,16 @@ import data, main
 import eval, subprocess
 import util
 
-# This classifier will test itself on the truth dataset
+# This classifier will say something is clickbait if it has ! or ? in the title
 def dumbClassifier():
     return lambda inst : 1 if set(inst["targetTitle"]) & set("?!") else 0
 
+# Everything is not clickbait classifier
 def dumberClassifier():
     return lambda inst : 0
 
+# test tne classifier (function instance -> score)
+# with eval.py
 def testClassifier(func, name='untitled.testoutput'):
     results = dict()
     instance, truth = data.getRawData(val=True)
