@@ -39,6 +39,11 @@ def classifier(inst):
 
     #Feature: Title punctuation
 
+    #Feature: Number of stopwords in title
+    def title_stopwords_feature:
+        for word in title:
+            if 
+
     #Feature: Average word length
 
     #Feature: Paragraph length
