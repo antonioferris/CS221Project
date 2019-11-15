@@ -6,6 +6,6 @@ How about we all add our names here to make sure we can pull, commit, and push c
 
 Antonio Ferris
 Johannes Hui 
-______________
+Dakota Shaw
 
 This is a project attempting to create a classifier for the Clickbait Challenge (https://www.clickbait-challenge.org/)
