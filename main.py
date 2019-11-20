@@ -6,13 +6,13 @@ import data, model, json
 
 def main():
     print('Finished Startup')
-    func = model.dumbClassifier()
+    # func = model.dumberClassifier()
+    # fname = '.trash'
+    # print('Testing Dumb Classifier')
+    # model.testClassifier(func, fname)
+    func = model.createLinearClassifier()
     fname = '.trash'
-    print('Testing Dumb Classifier')
-    model.testClassifier(func, fname)
-    func = model.dumberClassifier()
-    fname = '.trash'
-    print('Testing Dumber Classifier')
+    print('Testing Linear Classifier')
     model.testClassifier(func, fname)
 
 

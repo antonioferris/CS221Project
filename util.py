@@ -2,7 +2,7 @@
     This file contains utilility functions we might want to use
     across multiple files
 """
-import random, sys, os
+import random, sys, os, gensim
 
 # This function will return the
 # paths to train.josnl and instance.jsonl
@@ -16,6 +16,10 @@ VAL_INSTANCE_PATH, VAL_TRUTH_PATH = getPaths('clickbait17-validation-170630')
 
 def getOutputString(_id, clickbaitScore):
     return '{{ "id" : "{}", "clickbaitScore" : {} }}\n'.format(_id, clickbaitScore)
+
+def generateModel():
+    print('Generating Model.  Please wait 90s')
+    return gensim.models.KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True) 
 
 # Takes in a dict results to pathname
 # results is a dict id -> clickbaitScore
