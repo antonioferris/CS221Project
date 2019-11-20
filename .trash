@@ -1,52 +1,52 @@
 measure {
  key: "Size"
- value: "19538"
+ value: "2459"
 }
 measure {
  key: "#Clickbait"
- value: "4761"
+ value: "762"
 }
 measure {
  key: "#No-Clickbait"
- value: "14777"
-}
-measure {
- key: "R2 score"
- value: "-1.6477632971637477"
-}
-measure {
- key: "Mean absolute error"
- value: "0.3245299757561931"
-}
-measure {
- key: "Normalized mean squared error"
- value: "2.6477632971637477"
+ value: "1697"
 }
 measure {
  key: "Explained variance"
- value: "0.0"
+ value: "0.02303392339870436"
+}
+measure {
+ key: "Mean absolute error"
+ value: "0.19152409714518095"
 }
 measure {
  key: "Mean squared error"
- value: "0.1692364736380392"
+ value: "0.05555133962961344"
 }
 measure {
  key: "Median absolute error"
- value: "0.26666666664"
+ value: "0.18136392999999998"
 }
 measure {
- key: "Recall"
- value: "0.0"
+ key: "R2 score"
+ value: "-0.005072505723615395"
 }
 measure {
- key: "F1 score"
- value: "0.0"
-}
-measure {
- key: "Precision"
- value: "0.0"
+ key: "Normalized mean squared error"
+ value: "1.0050725057236154"
 }
 measure {
  key: "Accuracy"
- value: "0.756321015457058"
+ value: "0.6905246034973567"
+}
+measure {
+ key: "Precision"
+ value: "1.0"
+}
+measure {
+ key: "Recall"
+ value: "0.0013123359580052493"
+}
+measure {
+ key: "F1 score"
+ value: "0.002621231979030144"
 }
