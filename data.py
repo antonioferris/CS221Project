@@ -26,6 +26,17 @@ def getRawData(pathname=None, train=False, val=False):
             instance.append(json.loads(line))
     return (instance, truth)
 
+def getTrainTestData(n = 2000):
+    # Test data : 0 - 2000
+    # validation data : 2000 - 4000
+    # train data: train and val 4000+
+    instance1, truth1 = getRawData(val=True)
+    instance2, truth2 = getRawData(train=True)
+    instance, truth = instance1 + instance2, truth1 + truth2
+    test_instance, test_truth = instance[n:2*n], truth[n:2*n]
+    train_instance, train_truth = instance[2*n:], truth[2*n:]
+    return (train_instance, train_truth, test_instance, test_truth)
+
 # This function takes in a list of raw strings
 # and outputs a tokenized list of clean words
 # clean being lowercase, no stopwords, no punctuation
@@ -35,8 +46,3 @@ def getTokenizedWords(text):
     stop_words = get_stop_words('en')
     words = [word for word in words if not word in stop_words]
     return words
-
-instance, truth = getRawData(train=True)
-article_one = instance[0]["postText"]
-print(article_one)
-print(getTokenizedWords(article_one))
