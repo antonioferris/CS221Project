@@ -2,7 +2,10 @@
     This file contains utilility functions we might want to use
     across multiple files
 """
-import random, sys, os, gensim
+import random, sys, os, gensim, data
+
+labels, _ = data.getPickledData('train_data.pickle')
+label_dict = {labels[i]: i for i in range(len(labels))}
 
 # This function will return the
 # paths to train.josnl and instance.jsonl
