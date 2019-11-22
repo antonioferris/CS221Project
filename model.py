@@ -6,6 +6,7 @@ import data, main
 import eval, subprocess
 import util
 import numpy as np
+import random
 # import nltk
 # nltk.download('stopwords')
 import collections
@@ -39,7 +40,6 @@ def testClassifier(func, name='untitled.testoutput', n=2000):
         out = func(inst)
         while isinstance(out, list):
             out = out[0]
-        print(str(out)[2:-2], end='')
         results[_id] = str(out)[2:-2]
     util.dumpResults(results, '.tmpdmp')
     subprocess.run(["python", "eval.py", util.TRAIN_TRUTH_PATH, '.tmpdmp', name])
@@ -47,8 +47,8 @@ def testClassifier(func, name='untitled.testoutput', n=2000):
 def createLinearClassifier():
     train_instance, train_truth, test_instance, test_truth = data.getTrainTestData()
     regr = linear_model.LinearRegression()
-    model = util.generateModel()
-    print('Done')
+    # model = util.generateModel()
+    model = None
     X = []
     y = []
     n = len(train_instance)
@@ -59,11 +59,12 @@ def createLinearClassifier():
     y = np.asarray(y).reshape(-1, 1)
     print(X.shape, y.shape)
     regr.fit(X, y)
-    def r(inst):
-        # print(featureExtractorX(inst, model).reshape(1,300))
-        return  max(min(regr.predict(featureExtractorX(inst, model).reshape(1,300)), 1), 0)
+    def func(inst):
+        if random.random() < 0.005:
+            print(featureExtractorX(inst, model).reshape(1,-1))
+        return  max(min(regr.predict(featureExtractorX(inst, model).reshape(1,-1)), 1), 0)
     #return lambda inst : max(min(regr.predict(featureExtractorX(inst, model).reshape(1,300)), 1), 0)
-    return r
+    return func
 
 def featureExtractorX(inst, model):
     title = inst["targetTitle"]
@@ -86,12 +87,12 @@ def featureExtractorX(inst, model):
     #Gets punctuation counts in title
     def countPunc(text):
         total_count = 0
-        processedText = processText(text)
         punct_count = collections.defaultdict(int)
-        for word in processedText:
-            if word in string.punctuation:
-                punct_count[word] += 1
-                total_count += 1
+        for word in title:
+            for c in word:
+                if c in string.punctuation:
+                    punct_count[c] += 1
+                    total_count += 1
         return punct_count, total_count
     
     #Feature: Title punctuation count
@@ -138,35 +139,35 @@ def featureExtractorX(inst, model):
     keyword_nnp_count = len(keywords_proper_nouns)'''
 
     #Feature: Title Word2Vec
-    processed_title = processText(title)
+    # processed_title = processText(title)
 
     #Feature: Keyword Word2Vec
     #processed_keywords = processText(keywords)
 
     #Things to go into Word2Vec: processed_title, processed_keywords, title_proper_nouns, keywords_proper_nouns, captions
-    v1 = convertToWordVector(processed_title, model)
-    #v2 = np.asarray([title_punc_count, title_exclam_count, title_question_count])
+    # v1 = convertToWordVector(processed_title, model)
+    v2 = np.asarray([title_punc_count, title_exclam_count, title_question_count])
     #return np.concatenate((v1, v2), axis = None)
-    return v1
+    return v2
 
-def convertToWordVector(input, model):
-    if isinstance(input, list):
-        vectors = [model[word] for word in input if word in model.vocab]
-        percent_vocab = len(vectors) / len(input)
-        return np.mean(vectors, axis=0)
-    else:
-        return model[input]
+# def convertToWordVector(input, model):
+#     if isinstance(input, list):
+#         vectors = [model[word] for word in input if word in model.vocab]
+#         percent_vocab = len(vectors) / len(input)
+#         return np.mean(vectors, axis=0)
+#     else:
+#         return model[input]
 
-def convertToWordVectorDimReduce(word_list, dim=2):
-    vectors = [model[word] for word in word_list if word in model.vocab]
-    words = [word for word in word_list if word in model.vocab]
-    percent_vocab = len(words) / len(word_list)
-    print(str(percent_vocab) + "% of words in vocab")
-    word_vec_dict = dict(zip(vectors, words))
-    df = pd.DataFrame.from_dict(word_vec_dict, orient='index')
-    tsne = TSNE(n_components = dim, init = 'random', random_state = 10, perplexity = 100)
-    tsne_df = tsne.fit_transform(df[:500])
-    return tsne_df
+# def convertToWordVectorDimReduce(word_list, dim=2):
+#     vectors = [model[word] for word in word_list if word in model.vocab]
+#     words = [word for word in word_list if word in model.vocab]
+#     percent_vocab = len(words) / len(word_list)
+#     print(str(percent_vocab) + "% of words in vocab")
+#     word_vec_dict = dict(zip(vectors, words))
+#     df = pd.DataFrame.from_dict(word_vec_dict, orient='index')
+#     tsne = TSNE(n_components = dim, init = 'random', random_state = 10, perplexity = 100)
+#     tsne_df = tsne.fit_transform(df[:500])
+#     return tsne_df
 
 
 

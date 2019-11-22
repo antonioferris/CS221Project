@@ -30,7 +30,10 @@ def dumpResults(results, pathname=None):
     else:
         with open(pathname, "w") as outfile:
             for (_id, clickbaitScore) in results.items():
-                outfile.write(getOutputString(_id, clickbaitScore))
+                s = getOutputString(_id, clickbaitScore)
+                # if random.random() < 0.1:
+                #     print(s)
+                outfile.write(s)
 
 def testDump():
     results = {str(i) : random.random() for i in range(10)}

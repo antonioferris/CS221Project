@@ -10,10 +10,13 @@ def main():
     # fname = '.trash'
     # print('Testing Dumb Classifier')
     # model.testClassifier(func, fname)
-    func = model.createLinearClassifier()
-    fname = '.trash'
-    print('Testing Linear Classifier')
-    model.testClassifier(func, fname)
+    # func = model.createLinearClassifier()
+    # fname = '.trash'
+    # print('Testing Linear Classifier')
+    # model.testClassifier(func, fname)
+    train, val, test, labels = data.getTrainValTest()
+    print(len(train), len(val), len(test))
+    print(labels)
 
 
 if __name__ == '__main__':

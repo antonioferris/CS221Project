@@ -5,6 +5,25 @@
 import json, os
 import util
 from stop_words import get_stop_words
+import pickle
+
+def getTrainValTest():
+    l1, raw_train = getPickledData('train_data.pickle')
+    labels, raw_val = getPickledData('val_data.pickle')
+    assert(l1 == labels)
+    total_data = raw_train + raw_val
+    n = len(total_data)
+    train_sz = 4 * n // 5
+    test_val_sz = (n - train_sz) // 2
+    train_data = total_data[:train_sz]
+    cross_val_data = total_data[train_sz:train_sz + test_val_sz]
+    test_data = total_data[train_sz + test_val_sz:]
+    return (train_data, cross_val_data, test_data, labels)
+
+def getPickledData(pathname):
+    with open(pathname, 'rb') as f:
+        labels, D = pickle.load(f)
+    return labels, D
 
 # Given a pathname,
 # train or val simply tell getRawData to use a pre-assigned path
@@ -25,17 +44,6 @@ def getRawData(pathname=None, train=False, val=False):
         for line in instance_file:
             instance.append(json.loads(line))
     return (instance, truth)
-
-def getTrainTestData(n = 2000):
-    # Test data : 0 - 2000
-    # validation data : 2000 - 4000
-    # train data: train and val 4000+
-    instance1, truth1 = getRawData(val=True)
-    instance2, truth2 = getRawData(train=True)
-    instance, truth = instance1 + instance2, truth1 + truth2
-    test_instance, test_truth = instance[n:2*n], truth[n:2*n]
-    train_instance, train_truth = instance[2*n:], truth[2*n:]
-    return (train_instance, train_truth, test_instance, test_truth)
 
 # This function takes in a list of raw strings
 # and outputs a tokenized list of clean words
