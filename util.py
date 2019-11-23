@@ -2,10 +2,15 @@
     This file contains utilility functions we might want to use
     across multiple files
 """
-import random, sys, os, gensim, data
+import random, sys, os, gensim
+from sklearn import metrics
 
-labels, _ = data.getPickledData('train_data.pickle')
+labels = ['id', 'postMedia', 'postText', 'targetCaptions', 'targetParagraphs','targetTitle', 
+'postTimestamp', 'targetKeywords', 'targetDescription', 
+'truthJudgments', 'truthMean', 'truthClass', 'truthMedian', 'truthMode']
 label_dict = {labels[i]: i for i in range(len(labels))}
+
+
 
 # This function will return the
 # paths to train.josnl and instance.jsonl
@@ -42,3 +47,26 @@ def testDump():
     results = {str(i) : random.random() for i in range(10)}
     dumpResults(results)
     print('test dump done')
+
+def getInstMean(datum):
+    return datum[:9], datum[label_dict['truthMean']]
+
+def testClassifier(func, test_data):
+    n = len(test_data)
+    pred = []
+    y = []
+    for i in range(n):
+        inst, truth = getInstMean(test_data[i])
+        a, b = func(inst), truth
+        a, b = round(a), round(b)
+        assert(isinstance(a, int))
+        assert(isinstance(b, int))
+        assert(0 <= a <= 1)
+        assert(0 <= b <= 1)
+        pred.append(a)
+        y.append(b)
+    y = list(map(round, y))
+    pred = list(map(round, pred))
+    num_clickbait = sum(pred)
+    print('{} clickbait | {} not clickbait | {} test datapoints'.format(num_clickbait, n - num_clickbait, n))
+    print(metrics.classification_report(y, pred))
