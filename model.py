@@ -26,8 +26,8 @@ class Classifier():
     def getFunc(self):
         pass
 
-    def test(self, test_data):
-        util.testClassifier(self.getFunc(), test_data)
+    def test(self, test_data, threshold=0.5):
+        util.testClassifier(self.getFunc(), test_data, threshold)
 
     def testMulti(self, test_data):
         util.testMulticlass(self.getFunc(), test_data)

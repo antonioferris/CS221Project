@@ -29,12 +29,10 @@ class MultiClassModel(model.Classifier):
                 target = 2
             else:
                 target = 3
-            if i == 1:
-                print(inst[label_dict["targetTitle"]])
-                print(inst[label_dict["targetKeywords"]])
             X.append(self.featureExtractorX(inst, model))
             y.append(target)
         X = np.asarray(X)
+        print(collections.Counter(y).most_common())
         y = np.asarray(y).reshape(-1, 1)
         regr.fit(X, y)
         def func(inst):
