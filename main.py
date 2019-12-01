@@ -10,7 +10,7 @@ import multiclassmodel
 
 def main():
     print('Finished Startup')   
-    train_data, cross_val_data, test_data, labels = data.getTrainValTest()
+    train_data, cross_val_data, test_data = data.getTrainValTest()
 
     data.pickleData()
 
