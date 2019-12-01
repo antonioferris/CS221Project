@@ -9,7 +9,7 @@ import word2vecmodel_1
 import multiclassmodel
 
 def main():
-    print('Finished Startup')
+    print('Finished Startup')   
     train_data, cross_val_data, test_data, labels = data.getTrainValTest()
 
     # dumbc = model.DumbClassifier()
@@ -20,13 +20,13 @@ def main():
     # print('First Model (num punctuation features)')
     # fm.test(cross_val_data)
 
-    # dvm = doc2vecmodel.Doc2VecModel(train_data)
-    # print('Doc 2 Vec Model')
-    # dvm.test(cross_val_data)
+    dvm = doc2vecmodel.Doc2VecModel(train_data)
+    print('Doc 2 Vec Model')
+    dvm.test(cross_val_data, threshold=0.2)
 
-    mcm = multiclassmodel.MultiClassModel(train_data);
-    print('MultiClass Model')
-    mcm.testMulti(test_data)
+    # mcm = multiclassmodel.MultiClassModel(train_data);
+    # print('MultiClass Model')
+    # mcm.testMulti(test_data)
 
     # wvm = word2vecmodel_1.Word2VecModel(train_data)
     # print('First Word2Vec Model')

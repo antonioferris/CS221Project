@@ -5,6 +5,7 @@
 import random, sys, os, gensim
 from sklearn import metrics
 from stop_words import get_stop_words
+import collections
 
 labels = ['id', 'postTimestamp', 'postText', 'postMedia', 'targetTitle', 'targetDescription','targetKeywords', 'targetParagraphs','targetCaptions', 
 'truthJudgments', 'truthMean', 'truthMedian', 'truthMode', 'truthClass']
@@ -51,14 +52,14 @@ def testDump():
 def getInstMean(datum):
     return datum[:9], datum[label_dict['truthMean']]
 
-def testClassifier(func, test_data):
+def testClassifier(func, test_data, threshold):
     n = len(test_data)
     pred = []
     y = []
     for i in range(n):
         inst, truth = getInstMean(test_data[i])
         a, b = func(inst), truth
-        a, b = round(a), round(b)
+        a, b = 0 if a < threshold else 1, round(b)
         assert(isinstance(a, int))
         assert(isinstance(b, int))
         assert(0 <= a <= 1)
@@ -78,9 +79,12 @@ def testMulticlass(func, test_data):
     for i in range(n):
         inst, truth = getInstMean(test_data[i])
         a, b = func(inst) * 0.333, truth
-        print(a, end='')
         pred.append(a)
         y.append(b)
+    # print('True Counts')
+    # print(collections.Counter(y).most_common())
+    # print('Pred Counts')
+    # print(collections.Counter(pred).most_common())
     y = list(map(round, y))
     pred = list(map(round, pred))
     num_clickbait = sum(pred)

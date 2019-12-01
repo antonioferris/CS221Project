@@ -4,15 +4,15 @@ from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 import numpy as np
-from stop_words import get_stop_words
 import gensim
+import random
 
 class Doc2VecModel(model.Classifier):
     # We will build a Doc2Vec Model for the title
     def __init__(self, train_data):
         regr = linear_model.LinearRegression()
-        self.model = self.trainDoc2VecModel('targetTitle', train_data)
-
+        self.model = Doc2Vec.load("d2v.model")
+        print('Loaded Model')
         X = []
         y = []
         n = len(train_data)
@@ -65,6 +65,8 @@ class Doc2VecModel(model.Classifier):
 
     def featureExtractorX(self, inst):
         doc = inst[util.label_dict['targetTitle']]
-        doc_vec = self.model.infer_vector(doc.lower())
-        return np.asarray(doc_vec).reshape(1, -1)
+        doc_vec = self.model.infer_vector(util.processText(doc))
+        # if random.random() < 0.001:
+        #     print(doc_vec)
+        return np.asarray(doc_vec)
 
