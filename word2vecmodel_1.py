@@ -17,14 +17,17 @@ class Word2VecModel(model.Classifier):
     # with a self.f = func to be returned later in self.getFunc()
     # Also, notice that featureExtractorX is a class function now.
     def __init__(self, train_data):
+        self.id_set = set()
         regr = linear_model.LinearRegression()
-        # model = util.generateModel()
-        model = gensim.models.KeyedVectors.load_word2vec_format("./GoogleNews-vectors-negative300.bin", binary = True)
+        model = None
+        #model = gensim.models.KeyedVectors.load_word2vec_format("./GoogleNews-vectors-negative300.bin", binary = True)
         X = []
         y = []
         n = len(train_data)
         for i in range(n):
+            print(i)
             inst, truth = util.getInstMean(train_data[i])
+            #print(i, end=' ')
             X.append(self.featureExtractorX(inst, model))
             y.append(truth)
         X = np.asarray(X)
@@ -41,7 +44,7 @@ class Word2VecModel(model.Classifier):
         return self.f
 
     def processText(self, text):
-        tokens = [word.strip() for word in text]
+        tokens = text.split()
         words = [word.lower() for word in tokens if word.isalpha()]
         return words
 
@@ -53,12 +56,18 @@ class Word2VecModel(model.Classifier):
         captions = inst[label_dict["targetCaptions"]]
 
         #Things to go into Word2Vec: processed_title, processed_keywords, title_proper_nouns, keywords_proper_nouns, captions
-        processed_title = self.processText(title)
-        title_vec = convertToWordVector(title, model)
+        curr_id = inst[label_dict["id"]] 
+        assert(curr_id not in self.id_set)
+        self.id_set.add(curr_id)
+        processed_title = title.split()
+        print(processed_title)
+        #print(processed_title)
+        #title_vec = self.convertToWordVector(processed_title, model)
         #text_vec = 
         #keyword_vec = convertToWordVector(keywords, model)
         #return np.concatenate((title_vec, keyword_vec), axis = None)
-        return title_vec
+        #return title_vec
+        return 0
 
     def convertToWordVector(self, input, model):
         vectors = [model[word] for word in input if word in model.vocab]

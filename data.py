@@ -10,6 +10,9 @@ import pickle
 def getTrainValTest():
     l1, raw_train = getPickledData('train_data.pickle')
     labels, raw_val = getPickledData('val_data.pickle')
+    assert(len(labels) < 100)
+    print(l1)
+    print(labels)
     assert(l1 == labels)
     total_data = raw_train + raw_val
     n = len(total_data)
