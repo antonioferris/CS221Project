@@ -29,6 +29,9 @@ class Classifier():
     def test(self, test_data):
         util.testClassifier(self.getFunc(), test_data)
 
+    def testMulti(self, test_data):
+        util.testMulticlass(self.getFunc(), test_data)
+
 # This classifier will say something is clickbait if it has ! or ? in the title
 class DumbClassifier(Classifier):
     def getFunc(self):

@@ -4,6 +4,7 @@
 """
 import random, sys, os, gensim
 from sklearn import metrics
+from stop_words import get_stop_words
 
 labels = ['id', 'postTimestamp', 'postText', 'postMedia', 'targetTitle', 'targetDescription','targetKeywords', 'targetParagraphs','targetCaptions', 
 'truthJudgments', 'truthMean', 'truthMedian', 'truthMode', 'truthClass']
@@ -69,3 +70,35 @@ def testClassifier(func, test_data):
     num_clickbait = sum(pred)
     print('{} clickbait | {} not clickbait | {} test datapoints'.format(num_clickbait, n - num_clickbait, n))
     print(metrics.classification_report(y, pred))
+
+def testMulticlass(func, test_data):
+    n = len(test_data)
+    pred = []
+    y = []
+    for i in range(n):
+        inst, truth = getInstMean(test_data[i])
+        a, b = func(inst) * 0.333, truth
+        print(a, end='')
+        pred.append(a)
+        y.append(b)
+    y = list(map(round, y))
+    pred = list(map(round, pred))
+    num_clickbait = sum(pred)
+    print('{} clickbait | {} not clickbait | {} test datapoints'.format(num_clickbait, n - num_clickbait, n))
+    print(metrics.classification_report(y, pred))
+
+# Assume we are given a list of sentences
+def processText(text):
+    if isinstance(text, str):
+        text = [text]
+    words = []
+    for sentence in text:
+        for word in sentence.split():
+            words.append(word.strip())
+    words = [word.lower() for word in words if word.isalpha()]
+    _stopwords = get_stop_words('en')
+    words = [word for word in words if not word in _stopwords]
+    # tokens = word_tokenize(text)
+    # lower = [word.lower() for word in tokens if word.isalpha()]
+    # stop_tokens = [word for word in lower if word not in _stopwords]
+    return words

@@ -1,13 +1,18 @@
 import model
 import util
-from ntlk.tokenize import word_tokenize
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error
+import numpy as np
+from stop_words import get_stop_words
+import gensim
 
 class Doc2VecModel(model.Classifier):
     # We will build a Doc2Vec Model for the title
     def __init__(self, train_data):
-        self.
         regr = linear_model.LinearRegression()
+        self.model = self.trainDoc2VecModel('targetTitle', train_data)
+
         X = []
         y = []
         n = len(train_data)
@@ -15,7 +20,6 @@ class Doc2VecModel(model.Classifier):
             inst, truth = util.getInstMean(train_data[i])
             X.append(self.featureExtractorX(inst))
             y.append(truth)
-        self.model = self.trainDoc2VecModel('targetTitle', train_data)
         X = np.asarray(X)
         y = np.asarray(y).reshape(-1, 1)
         regr.fit(X, y)
@@ -27,7 +31,7 @@ class Doc2VecModel(model.Classifier):
         tagged_data = []
         for i in range(len(train_data)):
             doc = train_data[i][util.label_dict[data_label]]
-            tagged_doc = TaggedDocument(words=word_tokenize(doc.lower()), tags=[train_data[i][util.label_dict['truthClass']]])
+            tagged_doc = TaggedDocument(words=util.processText(doc), tags=[train_data[i][util.label_dict['truthClass']]])
             tagged_data.append(tagged_doc)
         
         max_epochs = 100
@@ -60,4 +64,7 @@ class Doc2VecModel(model.Classifier):
         return self.f
 
     def featureExtractorX(self, inst):
+        doc = inst[util.label_dict['targetTitle']]
+        doc_vec = self.model.infer_vector(doc.lower())
+        return np.asarray(doc_vec).reshape(1, -1)
 
