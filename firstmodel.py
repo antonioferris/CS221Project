@@ -15,6 +15,7 @@ from stop_words import get_stop_words
 import string
 from util import label_dict
 import model
+import gensim
 
 class FirstModel(model.Classifier):
     # Most of our classifiers should have an __init__ just like this one!
@@ -30,6 +31,9 @@ class FirstModel(model.Classifier):
         n = len(train_data)
         for i in range(n):
             inst, truth = util.getInstMean(train_data[i])
+            if i == 1:
+                print(inst[label_dict["targetTitle"]])
+                print(inst[label_dict["targetKeywords"]])
             X.append(self.featureExtractorX(inst, model))
             y.append(truth)
         X = np.asarray(X)

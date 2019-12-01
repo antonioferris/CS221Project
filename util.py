@@ -5,15 +5,14 @@
 import random, sys, os, gensim
 from sklearn import metrics
 
-labels = ['id', 'postMedia', 'postText', 'targetCaptions', 'targetParagraphs','targetTitle', 
-'postTimestamp', 'targetKeywords', 'targetDescription', 
-'truthJudgments', 'truthMean', 'truthClass', 'truthMedian', 'truthMode']
+labels = ['id', 'postTimestamp', 'postText', 'postMedia', 'targetTitle', 'targetDescription','targetKeywords', 'targetParagraphs','targetCaptions', 
+'truthJudgments', 'truthMean', 'truthMedian', 'truthMode', 'truthClass']
 label_dict = {labels[i]: i for i in range(len(labels))}
 
 
 
 # This function will return the
-# paths to train.josnl and instance.jsonl
+# paths to train.jsonl and instance.jsonl
 def getPaths(pathname):
     instance_path = os.path.join('.', pathname, "instances.jsonl")
     truth_path = os.path.join('.', pathname, "truth.jsonl")

@@ -5,6 +5,7 @@
 import data,json
 import model
 import firstmodel
+import word2vecmodel_1
 
 def main():
     print('Finished Startup')
@@ -16,6 +17,10 @@ def main():
 
     fm = firstmodel.FirstModel(train_data)
     print('First Model (num punctuation features)')
+    fm.test(test_data)
+
+    fm = word2vecmodel_1.Word2VecModel(train_data)
+    print('First Word2Vec Model')
     fm.test(test_data)
 
     # train, val, test, labels = data.getTrainValTest()
