@@ -11,7 +11,8 @@ class Doc2VecModel(model.Classifier):
     # We will build a Doc2Vec Model for the title
     def __init__(self, train_data, makeModel=False):
         regr = linear_model.LinearRegression()
-        self.MODEL_LABELS = ["postText", "targetTitle", "targetDescription", "targetKeywords", "targetParagraphs", "targetCaptions"]
+        # self.MODEL_LABELS = ["postText", "targetTitle", "targetDescription", "targetKeywords", "targetParagraphs", "targetCaptions"]
+        self.MODEL_LABELS = ["postText", "targetTitle"]
         if not makeModel:
             self.loadModels()
             print('Loaded Model')

@@ -27,8 +27,8 @@ def getPickledData(pathname):
 def pickleData():
     train_truth_path = 'clickbait17-train-170331\\truth.jsonl'
     train_inst_path = 'clickbait17-train-170331\instances.jsonl'
-    val_truth_path = 'clickbait17-train-170331\\truth.jsonl'
-    val_inst_path = 'clickbait17-train-170331\instances.jsonl'
+    val_truth_path = 'clickbait17-validation-170630\\truth.jsonl'
+    val_inst_path = 'clickbait17-validation-170630\instances.jsonl'
     raw_tr_inst = []
     raw_tr_truth = []
     raw_val_inst = []
@@ -49,6 +49,7 @@ def pickleData():
     assert(len(raw_tr_inst) == len(raw_tr_truth))
     n2 = len(raw_val_inst)
     assert(len(raw_val_inst) == len(raw_val_truth))
+    print(n1, n2)
 
     to_pickle_train = []
     to_pickle_val = []
@@ -72,6 +73,8 @@ def pickleData():
     assert(len(s1) == n1)
 
     for i in range(n2):
+        if i % 1000 == 0:
+            print(i)
         row = []
         inst = raw_val_inst[i]
         for j in range(n2):
