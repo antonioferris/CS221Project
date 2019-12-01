@@ -4,7 +4,7 @@
 """
 import data,json
 import model
-import firstmodel
+import firstmodel, doc2vecmodel
 
 def main():
     print('Finished Startup')
@@ -12,11 +12,15 @@ def main():
 
     dumbc = model.DumbClassifier()
     print('Dumb Classifier (clickbait if ! or ? in the title')
-    dumbc.test(test_data)
+    dumbc.test(cross_val_data)
 
     fm = firstmodel.FirstModel(train_data)
     print('First Model (num punctuation features)')
-    fm.test(test_data)
+    fm.test(cross_val_data)
+
+    dvm = doc2vecmodel.Doc2VecModel(train_data)
+    print('Doc 2 Vec Model')
+    dvm.test(cross_val_data)
 
     # train, val, test, labels = data.getTrainValTest()
     # print(len(train), len(val), len(test))
