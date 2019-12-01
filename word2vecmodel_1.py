@@ -19,17 +19,21 @@ class Word2VecModel(model.Classifier):
     def __init__(self, train_data):
         self.id_set = set()
         regr = linear_model.LinearRegression()
-        model = None
-        #model = gensim.models.KeyedVectors.load_word2vec_format("./GoogleNews-vectors-negative300.bin", binary = True)
+        #model = None
+        model = gensim.models.KeyedVectors.load_word2vec_format("./GoogleNews-vectors-negative300.bin", binary = True)
         X = []
         y = []
         n = len(train_data)
         for i in range(n):
-            print(i)
             inst, truth = util.getInstMean(train_data[i])
             #print(i, end=' ')
             X.append(self.featureExtractorX(inst, model))
             y.append(truth)
+        print(len(X))
+        print(X[0].shape)
+        n = X[0].shape[0]
+        for i in range(len(train_data)):
+            assert(X[i].shape[0] == n)
         X = np.asarray(X)
         y = np.asarray(y).reshape(-1, 1)
         regr.fit(X, y)
@@ -56,22 +60,28 @@ class Word2VecModel(model.Classifier):
         captions = inst[label_dict["targetCaptions"]]
 
         #Things to go into Word2Vec: processed_title, processed_keywords, title_proper_nouns, keywords_proper_nouns, captions
-        curr_id = inst[label_dict["id"]] 
-        assert(curr_id not in self.id_set)
-        self.id_set.add(curr_id)
+        #curr_id = inst[label_dict["id"]] 
+        #assert(curr_id not in self.id_set)
+        #self.id_set.add(curr_id)
         processed_title = title.split()
-        print(processed_title)
+        processed_keywords = title.split(",")
         #print(processed_title)
-        #title_vec = self.convertToWordVector(processed_title, model)
+        title_vec = self.convertToWordVector(processed_title, model)
+        print(title_vec.shape)
         #text_vec = 
-        #keyword_vec = convertToWordVector(keywords, model)
-        #return np.concatenate((title_vec, keyword_vec), axis = None)
+        keyword_vec = self.convertToWordVector(processed_keywords, model)
+        return np.concatenate((title_vec, keyword_vec), axis = None)
+        #assert(title_vec.shape == (300,))
         #return title_vec
-        return 0
 
     def convertToWordVector(self, input, model):
         vectors = [model[word] for word in input if word in model.vocab]
     #         percent_vocab = len(vectors) / len(input)
-        return np.mean(vectors, axis=0)
+        if len(vectors) == 0:
+            return np.zeros((300,))
+        else:
+            return np.mean(vectors, axis=0)
+            #vec_sum = np.sum(vectors, axis = 0)
+            #return vec_sum/np.linalg.norm(vec_sum)
     #     else:
     #         return model[input]

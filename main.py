@@ -12,7 +12,7 @@ def main():
     print('Finished Startup')   
     train_data, cross_val_data, test_data = data.getTrainValTest()
 
-    data.pickleData()
+    #data.pickleData()
 
     # dumbc = model.DumbClassifier()
     # print('Dumb Classifier (clickbait if ! or ? in the title')

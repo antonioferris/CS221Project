@@ -26,10 +26,10 @@ def getPickledData(pathname):
     return D
 
 def pickleData():
-    train_truth_path = 'clickbait17-train-170331\\truth.jsonl'
-    train_inst_path = 'clickbait17-train-170331\instances.jsonl'
-    val_truth_path = 'clickbait17-train-170331\\truth.jsonl'
-    val_inst_path = 'clickbait17-train-170331\instances.jsonl'
+    train_truth_path = 'clickbait17-train-170331/truth.jsonl'
+    train_inst_path = 'clickbait17-train-170331/instances.jsonl'
+    val_truth_path = 'clickbait17-validation-170630/truth.jsonl'
+    val_inst_path = 'clickbait17-validation-170630/instances.jsonl'
     raw_tr_inst = []
     raw_tr_truth = []
     raw_val_inst = []
