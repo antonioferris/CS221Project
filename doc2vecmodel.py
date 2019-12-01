@@ -11,8 +11,9 @@ class Doc2VecModel(model.Classifier):
     # We will build a Doc2Vec Model for the title
     def __init__(self, train_data, makeModel=False):
         regr = linear_model.LinearRegression()
-        # self.MODEL_LABELS = ["postText", "targetTitle", "targetDescription", "targetKeywords", "targetParagraphs", "targetCaptions"]
-        self.MODEL_LABELS = ["postText", "targetTitle"]
+        print('Training Doc2Vec on {} examples.'.format(len(train_data)))
+        self.MODEL_LABELS = ["postText", "targetTitle", "targetDescription", "targetKeywords", "targetParagraphs", "targetCaptions"]
+        # self.MODEL_LABELS = ["postText", "targetTitle"]
         if not makeModel:
             self.loadModels()
             print('Loaded Model')
@@ -45,46 +46,63 @@ class Doc2VecModel(model.Classifier):
         for label in self.MODEL_LABELS:
             self.models[label] = self.trainDoc2VecModel(label, train_data, model_name='d2v_' + label + '.model')
 
-    def trainDoc2VecModel(self, data_label, train_data, model_name='d2v.model2'):
-        tagged_data = []
-        for i in range(len(train_data)):
-            doc = train_data[i][util.label_dict[data_label]]
-            tagged_doc = TaggedDocument(words=util.processText(doc), tags=[train_data[i][util.label_dict['truthClass']]])
-            tagged_data.append(tagged_doc)
+    # def trainDoc2VecModel(self, data_label, train_data, model_name='d2v.model2'):
+    #     tagged_data = []
+    #     for i in range(len(train_data)):
+    #         doc = train_data[i][util.label_dict[data_label]]
+    #         tagged_doc = TaggedDocument(words=util.processText(doc), tags=[train_data[i][util.label_dict['truthClass']]])
+    #         tagged_data.append(tagged_doc)
         
-        max_epochs = 100
-        vec_size = 20
-        alpha = 0.025
-        model = Doc2Vec(size=vec_size,
-                alpha=alpha, 
-                min_alpha=0.00025,
-                min_count=1,
-                dm =1)
+    #     max_epochs = 100
+    #     vec_size = 20
+    #     alpha = 0.025
+    #     model = Doc2Vec(size=vec_size,
+    #             alpha=alpha, 
+    #             min_alpha=0.00025,
+    #             min_count=1,
+    #             dm =1)
         
-        model.build_vocab(tagged_data)
+    #     model.build_vocab(tagged_data)
 
-        for epoch in range(max_epochs):
-            print('{0} iteration {1}'.format(data_label, epoch))
-            model.train(tagged_data,
-                        total_examples=model.corpus_count,
-                        epochs=model.iter)
-            # decrease the learning rate
-            model.alpha -= 0.0002
-            # fix the learning rate, no decay
-            model.min_alpha = model.alpha
+    #     for epoch in range(max_epochs):
+    #         print('{0} iteration {1}'.format(data_label, epoch))
+    #         model.train(tagged_data,
+    #                     total_examples=model.corpus_count,
+    #                     epochs=model.iter)
+    #         # decrease the learning rate
+    #         model.alpha -= 0.0002
+    #         # fix the learning rate, no decay
+    #         model.min_alpha = model.alpha
         
-        model.save(name)
-        print("Model Saved")
-        return model
+    #     model.save(model_name)
+    #     print("Model {} Saved".format(model_name))
+    #     return model
 
 
     def getFunc(self):
         return self.f
 
     def featureExtractorX(self, inst):
-        doc = inst[util.label_dict['targetTitle']]
-        doc_vec = self.models['targetTitle'].infer_vector(util.processText(doc))
+        feature_vec = np.array([])
+        d1 = inst[util.label_dict['postText']]
+        dv1 = self.models['postText'].infer_vector(util.processText(d1))
+        feature_vec = np.append(feature_vec, dv1)
+        d2 = inst[util.label_dict['targetTitle']]
+        dv2 = self.models['targetTitle'].infer_vector(util.processText(d2))
+        feature_vec = np.append(feature_vec, dv2)
+        d3 = inst[util.label_dict['targetDescription']]
+        dv3 = self.models['targetDescription'].infer_vector(util.processText(d3))
+        feature_vec = np.append(feature_vec, dv3)
+        d4 = inst[util.label_dict['targetKeywords']]
+        dv4 = self.models['targetKeywords'].infer_vector(util.processText(d4))
+        feature_vec = np.append(feature_vec, dv4)
+        d5 = inst[util.label_dict['targetParagraphs']]
+        dv5 = self.models['targetParagraphs'].infer_vector(util.processText(d5))
+        feature_vec = np.append(feature_vec, dv5)
+        d6 = inst[util.label_dict['targetCaptions']]
+        dv6 = self.models['targetCaptions'].infer_vector(util.processText(d6))
+        feature_vec = np.append(feature_vec, dv6)
         # if random.random() < 0.001:
-        #     print(doc_vec)
-        return np.asarray(doc_vec)
+        #     print(feature_vec)
+        return np.asarray(feature_vec)
 
