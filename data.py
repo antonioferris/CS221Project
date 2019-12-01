@@ -8,12 +8,9 @@ from stop_words import get_stop_words
 import pickle
 
 def getTrainValTest():
-    l1, raw_train = getPickledData('train_data.pickle')
-    labels, raw_val = getPickledData('val_data.pickle')
-    assert(len(labels) < 100)
-    print(l1)
-    print(labels)
-    assert(l1 == labels)
+    raw_train = getPickledData('train_data.pickle')
+    raw_val = getPickledData('val_data.pickle')
+
     total_data = raw_train + raw_val
     n = len(total_data)
     train_sz = 4 * n // 5
@@ -21,7 +18,7 @@ def getTrainValTest():
     train_data = total_data[:train_sz]
     cross_val_data = total_data[train_sz:train_sz + test_val_sz]
     test_data = total_data[train_sz + test_val_sz:]
-    return (train_data, cross_val_data, test_data, labels)
+    return (train_data, cross_val_data, test_data)
 
 def getPickledData(pathname):
     with open(pathname, 'rb') as f:
