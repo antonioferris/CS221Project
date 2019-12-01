@@ -72,7 +72,7 @@ class Doc2VecModel(model.Classifier):
             # fix the learning rate, no decay
             model.min_alpha = model.alpha
         
-        model.save('d2v.model')
+        model.save(name)
         print("Model Saved")
         return model
 
