@@ -58,6 +58,7 @@ class Word2VecModel(model.Classifier):
         keywords = inst[label_dict["targetKeywords"]]
         paragraphs = inst[label_dict["targetParagraphs"]]
         captions = inst[label_dict["targetCaptions"]]
+        postText = inst[label_dict["postText"]]
 
         #Things to go into Word2Vec: processed_title, processed_keywords, title_proper_nouns, keywords_proper_nouns, captions
         #curr_id = inst[label_dict["id"]] 
@@ -65,14 +66,40 @@ class Word2VecModel(model.Classifier):
         #self.id_set.add(curr_id)
         processed_title = title.split()
         processed_keywords = title.split(",")
-        #print(processed_title)
+        processed_text = []
+        for par in paragraphs:
+            processed_text += par.split()
+        processed_caption = []
+        for cap in captions:
+            processed_caption += cap.split()
+        processed_description = description.split()
+
+        processed_postText = []
+        for post in postText:
+            processed_postText += post.split()
+
         title_vec = self.convertToWordVector(processed_title, model)
-        print(title_vec.shape)
-        #text_vec = 
         keyword_vec = self.convertToWordVector(processed_keywords, model)
-        return np.concatenate((title_vec, keyword_vec), axis = None)
+        text_vec = self.convertToWordVector(processed_text, model)
+        caption_vec = self.convertToWordVector(processed_caption, model)
+        description_vec = self.convertToWordVector(processed_description, model)
+        postText_vec = self.convertToWordVector(processed_postText, model)
+        description
+        return np.concatenate((title_vec, keyword_vec, text_vec, caption_vec, description_vec, postText_vec), axis = None)
         #assert(title_vec.shape == (300,))
-        #return title_vec
+        '''
+        cosine_sim = []
+        #title & text
+        if np.linalg.norm(title_vec) == 0 or np.linalg.norm(text_vec) == 0:
+            cosine_sim.append(0)
+        else:
+            cosine_sim.append(np.dot(title_vec, text_vec)/(np.linalg.norm(title_vec) * np.linalg.norm(text_vec)))
+        if np.linalg.norm(keyword_vec) == 0 or np.linalg.norm(text_vec) == 0:
+            cosine_sim.append(0)
+        else:
+            cosine_sim.append(np.dot(keyword_vec, text_vec)/(np.linalg.norm(keyword_vec) * np.linalg.norm(text_vec)))
+        return np.asarray(cosine_sim)
+        '''
 
     def convertToWordVector(self, input, model):
         vectors = [model[word] for word in input if word in model.vocab]

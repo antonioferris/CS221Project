@@ -30,10 +30,13 @@ def main():
     # print('MultiClass Model')
     # mcm.testMulti(test_data)
 
-    # print("BABAGANOUSH")
-    # wvm = word2vecmodel_1.Word2VecModel(train_data)
-    # print('First Word2Vec Model')
-    # wvm.test(test_data)
+    print("BABAGANOUSH")
+    wvm = word2vecmodel_1.Word2VecModel(train_data)
+    print('First Word2Vec Model')
+    wvm.test(cross_val_data, threshold = 0.5)
+
+    print("TRAIN ERROR")
+    wvm.test(train_data, threshold = 0.5)
 
     # train, val, test, labels = data.getTrainValTest()
     # print(len(train), len(val), len(test))
